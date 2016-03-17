@@ -1,0 +1,9 @@
+[Plugin]
+Loader=python3
+Module=gracer
+IAge=3
+Name=Gracer
+Description=Rust code completion plugin
+Authors=İsa Mert Gürbüz
+Copyright=İsa Mert Gürbüz
+Website=http://www.isamert.net
