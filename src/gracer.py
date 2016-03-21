@@ -99,7 +99,8 @@ class Racer:
                 completion_text = line_items[0]
                 completion_path = line_items[3]
                 completion_type = line_items[4]
-                completion.append((completion_text, completion_type, completion_path))
+                completion_line = line_items[5]
+                completion.append((completion_text, completion_type, completion_path, completion_line))
 
         return completion
 
@@ -247,8 +248,8 @@ class GracerCompletionProvider(GObject.Object, GtkSource.CompletionProvider):
         proposals = []
 
         #TODO: add completion for type (ex. add extra brackets for functions)
-        for _text, _type, _path in self.racer.get_matches(document):
-            proposals.append(GtkSource.CompletionItem.new(_text, _text, self.get_icon_for_type(_type), _path))
+        for _text, _type, _path, _line in self.racer.get_matches(document):
+            proposals.append(GtkSource.CompletionItem.new(_text, _text, self.get_icon_for_type(_type), _line))
 
         context.add_proposals(self, proposals, True)
 
