@@ -1,9 +1,11 @@
 # Gracer
 A rust code completion plugin for gedit. Built with the Rust auto completion tool by Phil Dawes (https://github.com/phildawes/racer).
 
+![Example](/screenshots/completion-1.png)
+
 ## Current Features:
 - Autocompletion
-- Find Definition
+- Find Definition (with right-click menu)
 
 ## Using
 - Download the project.
