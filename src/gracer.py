@@ -249,7 +249,9 @@ class GracerCompletionProvider(GObject.Object, GtkSource.CompletionProvider):
 
         #TODO: add completion for type (ex. add extra brackets for functions)
         for _text, _type, _path, _line in self.racer.get_matches(document):
-            proposals.append(GtkSource.CompletionItem.new(_text, _text, self.get_icon_for_type(_type), _line))
+            proposals.append(GtkSource.CompletionItem.new(
+                _text, _text, self.get_icon_for_type(_type),
+                _line.replace('&', '&amp;').replace('<', '&lt;')))
 
         context.add_proposals(self, proposals, True)
 
