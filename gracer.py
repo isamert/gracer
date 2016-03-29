@@ -238,6 +238,7 @@ class GracerCompletionProvider(GObject.Object, GtkSource.CompletionProvider):
 
     def do_match(self, context):
         # checked this before at GracerPlugin.do_active
+        print(context)
         return True
 
     def do_get_priority(self):
