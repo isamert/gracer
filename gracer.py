@@ -136,23 +136,21 @@ class GracerPlugin(GObject.Object, Gedit.ViewActivatable, PeasGtk.Configurable):
         self.handler_on_view_populate_popup = None
 
     def do_activate(self):
-        print("Gracer is activated.")
         document = self.view.get_buffer()
         document.connect("load", self.on_document_load)
 
         if document.get_uri_for_display().endswith(".rs"):
-            self.completion_provider = GracerCompletionProvider(self.view, self.racer)
+            self.completion_provider = GracerCompletionProvider(self.racer)
             self.view.get_completion().add_provider(self.completion_provider)
             self.view.connect('populate-popup', self.on_view_populate_popup)
 
     def do_deactivate(self):
-        print("Gracer is deactivated.")
-        #pass
+        pass
 
     def on_document_load(self, document):
         if document.get_uri_for_display().endswith(".rs"):
             if self.completion_provider is None:
-                self.completion_provider = GracerCompletionProvider(self.view, self.racer)
+                self.completion_provider = GracerCompletionProvider(self.racer)
                 self.view.get_completion().add_provider(self.completion_provider)
 
             if self.handler_on_view_populate_popup is None:
@@ -228,9 +226,8 @@ class GracerPlugin(GObject.Object, Gedit.ViewActivatable, PeasGtk.Configurable):
 class GracerCompletionProvider(GObject.Object, GtkSource.CompletionProvider):
     __gtype_name__ = 'GracerProvider'
 
-    def __init__(self, _view, _racer):
+    def __init__(self, _racer):
         GObject.Object.__init__(self)
-        self.view = _view
         self.racer = _racer
 
     def do_get_name(self):
@@ -245,7 +242,8 @@ class GracerCompletionProvider(GObject.Object, GtkSource.CompletionProvider):
         return 0
 
     def do_populate(self, context):
-        document = self.view.get_buffer()
+        _, it = context.get_iter()
+        document = it.get_buffer()
         proposals = []
 
         #TODO: add completion for type (ex. add extra brackets for functions)
