@@ -83,7 +83,6 @@ class Racer:
             print(e)
 
         temp_file.close()
-        print(output, "wqeqweqwewq")
         return output
 
     def get_matches(self, document):
@@ -264,9 +263,14 @@ class GracerCompletionProvider(GObject.Object, GtkSource.CompletionProvider):
 
     def get_icon_for_type(self, _type):
         #FIXME: find real icon names
-        icon_names = {"Module":"code-class", "Struct":"code-class", "StructField":"field",
-                      "Trait":"field", "Function":"code-function", "Let":"code-variable",
-                      "Enum":"icon", "Crate":"code-class"}
+        icon_names = {  "Module":       "code-class",
+                        "Struct":       "code-class",
+                        "StructField":  "field",
+                        "Trait":        "field",
+                        "Function":     "code-function",
+                        "Let":          "code-variable",
+                        "Enum":         "icon",
+                        "Crate":        "code-class"  }
 
         theme = Gtk.IconTheme.get_default()
         try:
