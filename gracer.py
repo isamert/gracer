@@ -83,6 +83,7 @@ class Racer:
             print(e)
 
         temp_file.close()
+        print(output, "wqeqweqwewq")
         return output
 
     def get_matches(self, document):
@@ -234,12 +235,19 @@ class GracerCompletionProvider(GObject.Object, GtkSource.CompletionProvider):
         return _("Gracer Rust Code Completion")
 
     def do_match(self, context):
-        # checked this before at GracerPlugin.do_active
-        print(context)
+        _, iter = context.get_iter()
+        iter.backward_char()
+        ch = iter.get_char()
+        if not (ch in (':', '.', '&') or ch.isalnum()):
+            return False
+
         return True
 
     def do_get_priority(self):
-        return 0
+        return 1
+
+    def do_get_activation(self):
+        return GtkSource.CompletionActivation.INTERACTIVE
 
     def do_populate(self, context):
         _, it = context.get_iter()
