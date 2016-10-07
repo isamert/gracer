@@ -59,7 +59,8 @@ class Racer:
         return self.RACER_PATH
 
     def init_racer(self, document, subcommand):
-        temp_file = tempfile.NamedTemporaryFile()
+        current_dir = os.path.dirname(document.get_uri_for_display())
+        temp_file = tempfile.NamedTemporaryFile(dir=current_dir)
         doc_text = document.get_text(document.get_start_iter(), document.get_end_iter(), False)
         temp_file.write(doc_text.encode('utf-8'))
         temp_file.seek(0)
