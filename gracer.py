@@ -234,7 +234,7 @@ class GracerCompletionProvider(GObject.Object, GtkSource.CompletionProvider):
         return _("Gracer Rust Code Completion")
 
     def do_match(self, context):
-        _, iter = context.get_iter()
+        iter = context.get_iter()
         iter.backward_char()
         ch = iter.get_char()
         if not (ch in (':', '.', '&') or ch.isalnum()):
@@ -249,7 +249,7 @@ class GracerCompletionProvider(GObject.Object, GtkSource.CompletionProvider):
         return GtkSource.CompletionActivation.INTERACTIVE
 
     def do_populate(self, context):
-        _, it = context.get_iter()
+        it = context.get_iter()
         document = it.get_buffer()
         proposals = []
 
