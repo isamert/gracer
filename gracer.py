@@ -1,8 +1,7 @@
 import os
 import tempfile
 import subprocess
-from gi.repository import GObject, Gedit, Gtk, GtkSource, PeasGtk
-
+from gi.repository import GObject, Gedit, Gtk, GtkSource, PeasGtk, Gio
 
 class Settings:
     def get_config_file_path():
@@ -219,7 +218,11 @@ class GracerPlugin(GObject.Object, Gedit.ViewActivatable, PeasGtk.Configurable):
         try:
             result_line = int(result[0]) - 1 # -1, because line numbering is 0-based
             result_char = int(result[1])
-            document.place_cursor(document.get_iter_at_line_offset(result_line, result_char))
+            result_file = os.path.normpath(result[2])
+            if os.path.normpath(document.get_uri_for_display()) == result_file:
+                document.place_cursor(document.get_iter_at_line_offset(result_line, result_char))
+            else:
+                Gedit.Window().create_tab_from_location(Gio.file_new_for_path(result_file), None, result_line, result_char, False, True)
         except Exception as e: # probably not found anything
             print(e)
 
