@@ -24,5 +24,5 @@ $ git clone https://github.com/isamert/gracer.git
 For updating:
 ```
 $ cd ~/.local/share/gedit/plugins/gracer
-$ git update
+$ git pull
 ```
