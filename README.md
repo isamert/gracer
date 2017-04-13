@@ -19,6 +19,7 @@ A rust code completion plugin for gedit. Built with the Rust auto completion too
 Instead of downloading you can just clone the project to your plugin path:
 ```
 $ mkdir -p ~/.local/share/gedit/plugins
+$ cd ~/.local/share/gedit/plugins
 $ git clone https://github.com/isamert/gracer.git
 ```
 For updating:
