@@ -9,9 +9,13 @@ A rust code completion plugin for gedit. Built with the Rust auto completion too
 
 ## Prerequisites
 - racer should already be installed. If you did not installed it until now run:
+
 ```cargo install racer```
+
 - a copy of the rust source should be on your system. If you did not download the rust source so far run: 
+
 ```rustup component add rust-src```
+
 for other installation methods please refer to: https://github.com/phildawes/racer/blob/master/README.md
 
 ## Using
