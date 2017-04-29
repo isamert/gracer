@@ -7,7 +7,7 @@ A rust code completion plugin for gedit. Built with the Rust auto completion too
 - Autocompletion
 - Find Definition (with right-click menu)
 
-##Prerequisites
+## Prerequisites
 - racer should already be installed. If you did not installed it until now run:
 ```cargo install racer```
 - a copy of the rust source should be on your system. If you did not download the rust source so far run: 
