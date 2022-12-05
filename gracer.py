@@ -58,8 +58,7 @@ class Racer:
         return self.RACER_PATH
 
     def init_racer(self, document, subcommand):
-        current_dir = os.path.dirname(document.get_uri_for_display())
-        temp_file = tempfile.NamedTemporaryFile(dir=current_dir)
+        temp_file = tempfile.NamedTemporaryFile()
         doc_text = document.get_text(document.get_start_iter(), document.get_end_iter(), False)
         temp_file.write(doc_text.encode('utf-8'))
         temp_file.seek(0)
@@ -137,18 +136,17 @@ class GracerPlugin(GObject.Object, Gedit.ViewActivatable, PeasGtk.Configurable):
 
     def do_activate(self):
         document = self.view.get_buffer()
-        document.connect("load", self.on_document_load)
-
-        if document.get_uri_for_display().endswith(".rs"):
-            self.completion_provider = GracerCompletionProvider(self.racer)
-            self.view.get_completion().add_provider(self.completion_provider)
-            self.view.connect('populate-popup', self.on_view_populate_popup)
+        self.signal = document.connect("loaded", self.on_document_load)
+        self.on_document_load(document)
 
     def do_deactivate(self):
-        pass
+        if self.signal is not None:
+            document = self.view.get_buffer()
+            document.disconnect(self.signal)
+            self.signal = None
 
     def on_document_load(self, document):
-        if document.get_uri_for_display().endswith(".rs"):
+        if (l := document.get_language()) is not None and l.get_id() == "rust":
             if self.completion_provider is None:
                 self.completion_provider = GracerCompletionProvider(self.racer)
                 self.view.get_completion().add_provider(self.completion_provider)
@@ -219,7 +217,7 @@ class GracerPlugin(GObject.Object, Gedit.ViewActivatable, PeasGtk.Configurable):
             result_line = int(result[0]) - 1 # -1, because line numbering is 0-based
             result_char = int(result[1])
             result_file = os.path.normpath(result[2])
-            if os.path.normpath(document.get_uri_for_display()) == result_file:
+            if os.path.normpath(document.get_file().get_location().get_path()) == result_file:
                 document.place_cursor(document.get_iter_at_line_offset(result_line, result_char))
             else:
                 Gedit.Window().create_tab_from_location(Gio.file_new_for_path(result_file), None, result_line, result_char, False, True)
@@ -265,9 +263,12 @@ class GracerCompletionProvider(GObject.Object, GtkSource.CompletionProvider):
 
         #TODO: add completion for type (ex. add extra brackets for functions)
         for _text, _type, _path, _line in self.racer.get_matches(document):
-            proposals.append(GtkSource.CompletionItem.new(
-                _text, _text, self.get_icon_for_type(_type),
-                _line.replace('&', '&amp;').replace('<', '&lt;')))
+            proposals.append(GtkSource.CompletionItem(
+                label = _text,
+                text = _text,
+                icon_name = self.get_icon_for_type(_type),
+                info = _line.replace('&', '&amp;').replace('<', '&lt;'),
+            ))
 
         context.add_proposals(self, proposals, True)
 
